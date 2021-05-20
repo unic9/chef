@@ -1,0 +1,51 @@
+chef generate cookbook <filename> #to create cookbook
+chef generate recipe >filename> #to create recipe
+
+chef exec ruby -c <file-location> # To check code in the recipe for no mistakes
+chef-client -zr "recipe[test-cookbook::test-recipe]"
+
+test recipes:-
+-------------
+file '/myfile' do
+  content 'welcome to chef world'
+  action :create
+end
+------------
+package 'tree' do
+  action :install
+end
+
+file '/myfiles' do
+  content 'this is the second recipe'
+  action :create
+  owner 'root'
+  group 'root'
+end
+------------
+
+#############
+
+#for including linux commands
+execute'run a script with linux command'do
+  command<<-EOH
+  mkdire /test1
+  touch /test1
+  EOH
+end
+
+
+Attributes:-
+
+
+
+file '/basicinfo' do
+   content "This is to get Attributes
+    HOSTNAME: #{node['hostname']}
+    IPADDRESS: #{node['ipaddress']}
+    CPU: #{node['cpu']['0']['mhz']}
+    MEMORY: #{node['memory']['total']}"
+    owner 'root'
+    group 'root'
+    action :create
+end
+
