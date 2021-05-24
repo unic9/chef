@@ -34,6 +34,7 @@ execute'run a script with linux command'do
 end
 
 
+
 Attributes:-
 
 
@@ -48,4 +49,65 @@ file '/basicinfo' do
     group 'root'
     action :create
 end
+
+
+#######
+
+file '/myfile' do
+  content 'welcome to chef world second edit'
+  action :create
+end
+
+execute 'run a script with linux command' do
+  command <<-EOH
+  mkdire /test1
+  touch /test1
+  EOH
+end
+
+user "kiran-user" do
+  action :create
+end
+
+group 'devops-group' do
+  action :create
+  members 'kiran-user'
+  append true
+end
+
+user "kiran-user2"
+file 'testfile'
+
+##########
+
+chef-client -zr "recipe[test-cookbook::test-recipe],recipe[apache-cookbook::apache-recipe]" ###to call multiple recipes
+
+#####
+#to include multiple recipes in a recipe(default.rb)
+
+include_recipe "apache-cookbook::apache-recipe"
+include_recipe "apache-cookbook::recipe3"
+
+####
+
+#To bootstrap a node
+knife bootstrap <private-ipaddres> --ssh-user ec2-user --sudo -i key.pem -N <nodename>
+#To check node list or to check wheather bootstrap is succesful or not 
+knife node list
+
+#To upload cookbooks on server
+knife cookbook upload apache-cookbook 
+
+#To set roles on node
+knife node run_list set <nodename> "role[devops]"
+#To check the roles connected to the nodes
+knife node show <nodename>
+
+
+
+#To upload a roles to the server
+knife role from file roles/devops.rb
+#To get list for roles 
+knife role list 
+
 
